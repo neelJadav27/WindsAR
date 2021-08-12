@@ -6,10 +6,10 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-
+import Colors from '../utils/Colors';
 const LoginPage = ({navigation}) => {
   return (
-    <>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       <View style={{backgroundColor: 'white'}}>
         <BackArrow
           name="arrow-back"
@@ -21,7 +21,7 @@ const LoginPage = ({navigation}) => {
         <Text style={styles.text}> Login</Text>
       </View>
       <LoginComponent navigation={navigation} />
-    </>
+    </View>
   );
 };
 
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: hp('5%'),
     fontWeight: 'bold',
-    color: 'rgba(0, 36, 86, 1)',
+    color: Colors.APP_BLUE,
   },
   customMargin: {
     flex: 0.45,

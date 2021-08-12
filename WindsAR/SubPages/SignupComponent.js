@@ -9,6 +9,8 @@ import {
   View,
   Text,
 } from 'react-native';
+import Colors from '../utils/Colors';
+import CheckBox from '@react-native-community/checkbox';
 import Icon from 'react-native-vector-icons/AntDesign';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {
@@ -16,6 +18,8 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 const SignupComponent = ({navigation}) => {
+  const [showTermsbox, setShowTermsbox] = useState(false);
+  const [termsCheckbox, setTermsCheckbox] = useState(false);
   const [data, setData] = useState(null);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
@@ -124,7 +128,7 @@ const SignupComponent = ({navigation}) => {
         });
       } else if (!startRegex.test(password.password)) {
         setPasswordError({
-          passwordErrorMessage: 'Password msut start with letter',
+          passwordErrorMessage: 'Password must start with letter',
           isValid: false,
         });
       } else if (!pwdRegex.test(password.password)) {
@@ -172,48 +176,57 @@ const SignupComponent = ({navigation}) => {
         });
       }
     }
-    if (
-      nameError.isValid &&
-      DOBError.isValid &&
-      emailError.isValid &&
-      passwordError.isValid &&
-      repasswordError.isValid &&
-      name.length != 0 &&
-      DOB.length != 0 &&
-      email.length != 0 &&
-      password.length != 0 &&
-      repassword.length != 0
-    ) {
-      //Sending  Data
-      var RegisterData = {
-        name: name.name,
-        emailid: email.email,
-        password: password.password,
-        dob: DOB,
-      };
-      fetch('http://localhost:8000/registerCustomer/register/', {
+    if (termsCheckbox == false) {
+      alert('Please agree to terms to conditions');
+    } else {
+      if (
+        nameError.isValid &&
+        DOBError.isValid &&
+        emailError.isValid &&
+        passwordError.isValid &&
+        repasswordError.isValid &&
+        name.length != 0 &&
+        DOB.length != 0 &&
+        email.length != 0 &&
+        password.length != 0 &&
+        repassword.length != 0
+      ) {
+        sendDataAPI();
+      }
+    }
+  };
+  const sendDataAPI = async () => {
+    var RegisterData = {
+      name: name.name,
+      emailid: email.email,
+      password: password.password,
+      dob: DOB,
+    };
+
+    let response = await fetch(
+      'https://windsar.herokuapp.com/registerCustomer/register/',
+      {
         method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           name: RegisterData.name,
           email: RegisterData.emailid,
           password: RegisterData.password,
           dob: RegisterData.dob,
         }),
-      })
-        .then(response => response.json())
-        .then(responseData => setData(responseData))
-        .catch(error => alert(error));
-      //Sending data ends
-
-      if (data.sucess != null) {
-        if (data.sucess) {
-          alert('User successfully entered');
-          navigation.navigate('LoginPage');
-        }
-      }
+      },
+    );
+    let recieveResponse = await response.json();
+    if (recieveResponse.success == 'True') {
+      alert('User is registered');
+      navigation.navigate('LoginPage');
+    } else {
+      alert('User is not registered');
     }
   };
-
   const onChange = (event, selectedDate) => {
     //alertMessage();
     const currentDate = selectedDate || date;
@@ -224,16 +237,19 @@ const SignupComponent = ({navigation}) => {
       (DateObj.getMonth() + 1) +
       '/' +
       DateObj.getFullYear();*/
+    let month = DateObj.getMonth() + 1;
+    if (month < 10) {
+      month = '0' + month;
+    }
+    let day = DateObj.getDate();
+    if (day < 10) {
+      day = '0' + day;
+    }
 
-    var formattedDate =
-      DateObj.getFullYear() +
-      '-' +
-      (DateObj.getMonth() + 1) +
-      '-' +
-      DateObj.getDate();
-    setDOB(formattedDate);
+    var formattedDate = DateObj.getFullYear() + '-' + month + '-' + day;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
+    setDOB(formattedDate);
   };
   const alertMessage = () => {
     alert('working');
@@ -308,10 +324,78 @@ const SignupComponent = ({navigation}) => {
           style={styles.input}
           onChangeText={data => setRepassword({repassword: data})}
         />
-
         <Text style={styles.errorText}>
           {repasswordError.repasswordErrorMessage}
         </Text>
+        <View style={{flexDirection: 'row'}}>
+          <Text
+            style={{
+              textAlign: 'center',
+              color: 'yellow',
+              marginLeft: wp('12%'),
+              marginTop: hp('0.8%'),
+            }}>
+            I agree to terms and condition by signing up
+          </Text>
+          <CheckBox
+            value={termsCheckbox}
+            onValueChange={setTermsCheckbox}
+            tintColors={{true: 'white', false: 'white'}}
+            style={{alignSelf: 'center', marginBottom: -3}}
+          />
+        </View>
+        {showTermsbox && (
+          <View style={styles.termsConditionBox}>
+            <View style={{padding: hp('3%')}}>
+              <Text style={styles.termsConditionText}>
+                Etiam pulvinar mi enim, vel laore leo efficitur non.
+              </Text>
+              <Text style={styles.termsConditionText}>
+                Etiam pulvinar mi enim, vel laore leo efficitur non.
+              </Text>
+              <Text style={styles.termsConditionText}>
+                Etiam pulvinar mi enim, vel laore leo efficitur non.
+              </Text>
+              <Text style={styles.termsConditionText}>
+                Etiam pulvinar mi enim, vel laore leo efficitur non.
+              </Text>
+              <Text style={styles.termsConditionText}>
+                Etiam pulvinar mi enim, vel laore leo efficitur non.
+              </Text>
+              <Text style={styles.termsConditionText}>
+                Etiam pulvinar mi enim, vel laore leo efficitur non.
+              </Text>
+              <Text style={styles.termsConditionText}>
+                Etiam pulvinar mi enim, vel laore leo efficitur non.
+              </Text>
+              <Text style={styles.termsConditionText}>
+                Etiam pulvinar mi enim, vel laore leo efficitur non.
+              </Text>
+              <Text style={styles.termsConditionText}>
+                Etiam pulvinar mi enim, vel laore leo efficitur non.
+              </Text>
+              <Text style={styles.termsConditionText}>
+                Etiam pulvinar mi enim, vel laore leo efficitur non.
+              </Text>
+              <Text style={styles.termsConditionText}>
+                Etiam pulvinar mi enim, vel laore leo efficitur non.
+              </Text>
+            </View>
+            <View style={{marginBottom: 'auto'}}></View>
+            <TouchableOpacity
+              style={{alignSelf: 'flex-end', padding: hp('3.0%')}}
+              onPress={() => setShowTermsbox(false)}>
+              <Text
+                style={{
+                  fontSize: hp('2.5%'),
+                  fontWeight: 'bold',
+                  textDecorationLine: 'underline',
+                }}>
+                Close
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         <TouchableOpacity style={styles.touchButton} onPress={validateInput}>
           <Text style={styles.buttonText}> Sign up </Text>
@@ -322,9 +406,22 @@ const SignupComponent = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  termsConditionText: {
+    fontSize: hp('2.5%'),
+  },
+  termsConditionBox: {
+    zIndex: 1,
+    borderRadius: hp('6%'),
+    marginTop: hp('3%'),
+    alignSelf: 'center',
+    position: 'absolute',
+    height: hp('78%'),
+    width: wp('85%'),
+    backgroundColor: 'white',
+  },
   dob: {flexDirection: 'row'},
   input: {
-    margin: hp('1.5%'),
+    margin: hp('1.4%'),
     height: hp('6.2%'),
     width: wp('80%'),
     paddingLeft: wp('6%'),
@@ -355,14 +452,13 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopLeftRadius: hp('7%'),
     borderTopRightRadius: hp('7%'),
-    backgroundColor: 'rgba(0, 36, 86, 1)',
+    backgroundColor: Colors.APP_BLUE,
   },
   touchButton: {
     backgroundColor: 'gold',
     height: hp('7%'),
     width: wp('25%'),
     alignSelf: 'flex-end',
-    marginTop: hp('1%'),
     marginRight: wp('9%'),
     borderRadius: hp('4%'),
     marginBottom: hp('5%'),

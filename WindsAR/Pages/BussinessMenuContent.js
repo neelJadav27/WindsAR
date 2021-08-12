@@ -1,49 +1,53 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
-import HomePage from './HomePage';
+import UserHomePage from './UserHomePage';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-const MenuContent = props => {
+import Colors from '../utils/Colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useSelector} from 'react-redux';
+const BussinessMenuContent = ({navigation}) => {
+  const {businessVoucherData} = useSelector(state => state.business);
+  const {imageData} = useSelector(state => state.business);
+  const {businessData} = useSelector(state => state.business);
+  const logoutBusiness = async () => {
+    await AsyncStorage.clear().then(navigation.navigate('Navigator'));
+  };
   return (
     <>
       <View style={styles.half1}>
         <View style={styles.imagePointBoxStyle}>
-          <Image
-            style={styles.imageStyle}
-            source={require('../Images/Smit2.jpg')}></Image>
+          <TouchableOpacity onPress={() => getImage()}>
+            {imageData == null ? (
+              <Image
+                style={styles.imageStyle}
+                source={require('../Images/black.jpg')}></Image>
+            ) : (
+              <Image
+                style={styles.imageStyle}
+                source={{uri: imageData}}></Image>
+            )}
+          </TouchableOpacity>
           <View style={styles.textWinCoinsGroup}>
-            <Text style={styles.textWinCoins}>9995</Text>
-            <Text style={styles.textWinCoins2}>WINCOINS</Text>
+            <Text style={styles.textWinCoins}>
+              {businessVoucherData.length}
+            </Text>
+            <Text style={styles.textWinCoins2}>Vouchers</Text>
           </View>
         </View>
-        <Text style={styles.text2}>Hi, Smitkumar Patel</Text>
+        <Text style={styles.text2}>Hi, {businessData.name}</Text>
       </View>
 
       <View style={styles.half2}>
-        <TouchableOpacity onPress={() => alert('Hi')}>
-          <Text style={styles.text}>Profile</Text>
-        </TouchableOpacity>
-        <View style={styles.line}></View>
-        <TouchableOpacity onPress={() => alert('Hi')}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('BussinessVouchers')}>
           <Text style={styles.text}>Voucher</Text>
         </TouchableOpacity>
         <View style={styles.line}></View>
-        <TouchableOpacity onPress={() => alert('Hi')}>
-          <Text style={styles.text}>Setting</Text>
-        </TouchableOpacity>
-        <View style={styles.line}></View>
-        <TouchableOpacity onPress={() => alert('Hi')}>
-          <Text style={styles.text}>My History</Text>
-        </TouchableOpacity>
-        <View style={styles.line}></View>
-        <TouchableOpacity onPress={() => alert('Hi')}>
-          <Text style={styles.text}>Get Help</Text>
-        </TouchableOpacity>
-        <View style={styles.line}></View>
-        <TouchableOpacity onPress={() => alert('Hi')}>
+        <TouchableOpacity onPress={logoutBusiness}>
           <Text style={styles.text}>Log out</Text>
         </TouchableOpacity>
       </View>
@@ -67,7 +71,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: hp('2.7%'),
-    color: 'rgba(0, 36, 86, 1)',
+    color: Colors.APP_BLUE,
   },
   text2: {
     fontSize: hp('2.3%'),
@@ -94,7 +98,7 @@ const styles = StyleSheet.create({
     marginBottom: hp('2.6%'),
     height: hp('0.25%'),
     width: wp('60%'),
-    backgroundColor: 'rgba(0, 36, 86, 1)',
+    backgroundColor: Colors.APP_BLUE,
   },
   imagePointBoxStyle: {
     alignItems: 'center',
@@ -102,7 +106,7 @@ const styles = StyleSheet.create({
     height: hp('10%'),
     width: wp('50%'),
     borderRadius: hp('10%'),
-    backgroundColor: 'rgba(0, 36, 86, 1)',
+    backgroundColor: Colors.APP_BLUE,
   },
   imageStyle: {
     height: hp('10%'),
@@ -110,4 +114,4 @@ const styles = StyleSheet.create({
     borderRadius: hp('10%'),
   },
 });
-export default MenuContent;
+export default BussinessMenuContent;

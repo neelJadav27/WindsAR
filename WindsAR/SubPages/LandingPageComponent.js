@@ -4,6 +4,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import Colors from '../utils/Colors';
 const LandingPageComponent = ({navigation}) => {
   return (
     <View style={styles.customMargin}>
@@ -55,11 +56,12 @@ const styles = StyleSheet.create({
     paddingRight: wp('13%'),
   },
   customMargin: {
+    flex: 1,
     paddingTop: hp('5%'),
     marginTop: hp('53%'),
     borderTopLeftRadius: hp('7%'),
     borderTopRightRadius: hp('7%'),
-    backgroundColor: 'rgba(0, 36, 86, 1)',
+    backgroundColor: Colors.APP_BLUE,
   },
   touchButton: {
     backgroundColor: 'gold',

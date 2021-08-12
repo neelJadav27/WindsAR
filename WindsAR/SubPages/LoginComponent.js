@@ -6,10 +6,13 @@ import {
   View,
   Text,
 } from 'react-native';
+import Colors from '../utils/Colors';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingComponent from '../Pages/LoadingComponent';
 const LoginComponent = ({navigation}) => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
@@ -21,12 +24,13 @@ const LoginComponent = ({navigation}) => {
     passwordErrorMessage: '',
     isValid: true,
   });
-
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const validateInput = () => {
     const unamePwdStartRegex = /^[a-zA-Z]/;
     //const unameRegex = /^[a-zA-Z][a-zA-Z0-9]*$/;
     // Email regex below
-    // const unameRegex2 = /^[a-zA-Z][a-zA-Z0-9]*[@][a-zA-Z]*[.][a-z]{2,}$/;
+    const unameRegex2 = /^[a-zA-Z][a-zA-Z0-9]*[@][a-zA-Z]*[.][a-z]{2,}$/;
     const pwdRegex = /^[a-zA-Z]([a-zA-Z0-9]*[@#$]*)*$/;
 
     if (username.length == 0) {
@@ -59,7 +63,7 @@ const LoginComponent = ({navigation}) => {
         isValid: false,
       });
     } else {
-      if (password.password.length < 7) {
+      if (password.password.length < 3) {
         setPasswordError({
           passwordErrorMessage: 'Password is more than 6',
           isValid: false,
@@ -88,37 +92,57 @@ const LoginComponent = ({navigation}) => {
       username.length != 0 &&
       password.length != 0
     ) {
-      const [data, setData] = useState(null);
       //Sending  Data
-      var LoginData = {
-        email: username.username,
-        password: password.password,
-      };
-      fetch('http://localhost:8000/registerCustomer/login/', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: LoginData.email,
-          password: LoginData.password,
-        }),
-      })
-        .then(response => response.json())
-        .then(responseData => setData(responseData))
-        .catch(error => alert(error));
-      //Sending data ends
-
-      if (data.sucess != null) {
-        if (data.sucess) {
-          alert(data.message);
-        }
-      }
+      setIsLoading(true);
+      sendDataAPI();
     }
   };
-
+  const sendDataAPI = async () => {
+    var LoginData = {
+      email: username.username,
+      password: password.password,
+    };
+    let response = await fetch(
+      'https://windsar.herokuapp.com/registerCustomer/login/',
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: LoginData.email,
+          password: LoginData.password,
+        }),
+      },
+    );
+    let recieveResponse = await response.json();
+    if (recieveResponse.success == 'True') {
+      await AsyncStorage.clear();
+      AsyncStorage.setItem('isLogged', JSON.stringify(true));
+      AsyncStorage.setItem(
+        'user_id',
+        JSON.stringify(recieveResponse.customer_id),
+      );
+      AsyncStorage.setItem('userType', 'customer').then(
+        navigation.navigate('Navigator'),
+      );
+    } else {
+      console.log(recieveResponse);
+      alert('Wrong user/password. Enter again.');
+    }
+    setIsLoading(false);
+  };
   const alertMessage = () => {
     alert('working');
   };
   return (
     <View style={styles.customMargin}>
+      {isLoading && (
+        <View>
+          <LoadingComponent></LoadingComponent>
+        </View>
+      )}
       <Text style={[styles.text, {marginTop: hp('4%')}]}> Username </Text>
       <TextInput
         style={styles.input}
@@ -168,7 +192,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopLeftRadius: hp('7%'),
     borderTopRightRadius: hp('7%'),
-    backgroundColor: 'rgba(0, 36, 86, 1)',
+    backgroundColor: Colors.APP_BLUE,
     justifyContent: 'center',
   },
   touchButton: {
