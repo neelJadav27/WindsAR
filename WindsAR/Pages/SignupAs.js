@@ -6,9 +6,10 @@ import {
 } from 'react-native-responsive-screen';
 import ArrowRight from 'react-native-vector-icons/AntDesign';
 import BackArrow from 'react-native-vector-icons/MaterialIcons';
+import Colors from '../utils/Colors';
 const SignupAs = ({navigation}) => {
   return (
-    <>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       <View style={{backgroundColor: 'white'}}>
         <BackArrow
           name="arrow-back"
@@ -26,7 +27,9 @@ const SignupAs = ({navigation}) => {
           onPress={() => navigation.navigate('SignupPage')}>
           <Text style={styles.textCus}> Customer</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonOwn}>
+        <TouchableOpacity
+          style={styles.buttonOwn}
+          onPress={() => navigation.navigate('BussinessSignupPage')}>
           <Text style={styles.textOwn}> Bussiness Owner</Text>
         </TouchableOpacity>
         <View style={styles.devArrow}>
@@ -39,7 +42,7 @@ const SignupAs = ({navigation}) => {
             style={styles.arrowRight}></ArrowRight>
         </View>
       </View>
-    </>
+    </View>
   );
 };
 
@@ -60,13 +63,13 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: hp('7%'),
     borderTopRightRadius: hp('7%'),
     flex: 0.6,
-    backgroundColor: 'rgba(0, 36, 86, 1)',
+    backgroundColor: Colors.APP_BLUE,
     alignItems: 'center',
   },
   heading: {
     fontSize: hp('5%'),
     fontWeight: 'bold',
-    color: 'rgba(0, 36, 86, 1)',
+    color: Colors.APP_BLUE,
   },
   text: {
     paddingTop: hp('3%'),

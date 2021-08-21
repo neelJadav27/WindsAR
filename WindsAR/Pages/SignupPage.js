@@ -2,13 +2,14 @@ import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import SignupComponent from '../SubPages/SignupComponent';
 import BackArrow from 'react-native-vector-icons/MaterialIcons';
+import Colors from '../utils/Colors';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 const SignupPage = ({navigation}) => {
   return (
-    <>
+    <View style={{flex: 1, backgroundColor: '#ffffff'}}>
       <View style={{backgroundColor: 'white'}}>
         <BackArrow
           name="arrow-back"
@@ -20,7 +21,7 @@ const SignupPage = ({navigation}) => {
         <Text style={styles.text}> Sign up</Text>
       </View>
       <SignupComponent navigation={navigation}></SignupComponent>
-    </>
+    </View>
   );
 };
 
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: hp('5%'),
     fontWeight: 'bold',
-    color: 'rgba(0, 36, 86, 1)',
+    color: Colors.APP_BLUE,
   },
   customMargin: {
     flex: 0.12,
