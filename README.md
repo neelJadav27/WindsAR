@@ -6,6 +6,8 @@ WindsAR is a mobile application which is developed to increase the revenue of to
 
 The prime feature of this application is a coin rewarding system, named ’WinCoins’ which encourages users to look in on the key details of various places through our application to in augmented reality and collect WinCoins from there. Later the points collected by users can be redeemed for discounts/coupons from retailers/business owners in Windsor like food chains, restaurants, café and much more.
 
+this is new line
+
 <h1><b>Screenshots</b></h1>
 
 ![WelcomePage](https://user-images.githubusercontent.com/85033138/137004473-e5cc9db4-6dfc-4520-a344-eed01ed0923b.jpg)  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ![profilePage](https://user-images.githubusercontent.com/85033138/137003574-5b9c73df-33d5-43c1-8c2f-671ce611d129.jpg) 
