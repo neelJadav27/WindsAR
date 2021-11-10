@@ -10,5 +10,4 @@ this is new line
 
 <h1><b>Screenshots</b></h1>
 
-![WelcomePage](https://user-images.githubusercontent.com/85033138/137004473-e5cc9db4-6dfc-4520-a344-eed01ed0923b.jpg)  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ![profilePage](https://user-images.githubusercontent.com/85033138/137003574-5b9c73df-33d5-43c1-8c2f-671ce611d129.jpg) 
-
+![WhatsApp Image 2021-11-10 at 6 10 02 PM](https://user-images.githubusercontent.com/85033138/141208748-4d9d37fc-5d25-494d-8a3a-4ffc8a3bd0d4.jpeg)
